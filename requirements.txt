@@ -1,0 +1,14 @@
+aniso8601==8.1.0
+click==7.1.2
+Flask==1.1.2
+Flask-RESTful==0.3.8
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+mysql-connector-python @ file:///home/vagrant/mysql_connector_python-8.0.22-cp36-cp36m-manylinux1_x86_64.whl
+protobuf==3.14.0
+pytz==2020.4
+simplejson==3.17.2
+six==1.15.0
+uWSGI==2.0.19.1
+Werkzeug==1.0.1

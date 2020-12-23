@@ -1,0 +1,53 @@
+Create pythonRESt.service
+
+location  = sudo vi /etc/systemd/system/pythonRESt
+
+            [Unit]
+            Description=uWSGI instance to serve pythonREST
+            After=network.target
+
+
+            [Service]
+            User=vagrant
+            Group=nginx
+            WorkingDirectory=/home/vagrant/pythonREST
+            Environment="PATH=/home/vagrant/pythonREST/pythonREST/bin"
+            ExecStart=/home/vagrant/pythonREST/pythonREST/bin/uwsgi --ini pythonREST.ini
+
+            [Install]
+            WantedBy=multi-user.target
+
+sudo systemctl start pythonREST
+sudo systemctl enable pythonREST
+
+
+then configure nginx
+
+location : sudo vi /etc/nginx/nginx.conf
+
+        server{
+        listen  80;
+       server_name  192.133.33.33;
+
+        location = /favicon.ico{ access_log off; log_not_found off; }
+        location /static/ {
+             root /home/vagrant/djangoProject;
+        }
+
+        location / {
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_pass http://unix:/home/vagrant/djangoProject/djangoProject.sock;
+        }
+
+## this part is newly added###
+
+        location /pythonREST {
+           include uwsgi_params;
+           uwsgi_pass unix:/home/vagrant/pythonREST/pythonREST.sock;
+           uwsgi_param SCRIPT_NAME /pythonREST;
+}
+     }
+
